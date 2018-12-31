@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Оптимальная партия</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row"></div>
+		<div class="row">
+			<div class="file-field input-field">
+				<div class="btn col">
+					<span>Загрузить  исходные данные из файла</span>
+					<input id="upload_data" type="file" accept=".orz">
+				</div>
+				<div class="file-path-wrapper">
+					<input class="file-path validate" type="text">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<a id="save_data" class="waves-effect waves-light btn col s12">Сохранить исходные данные в файл</a>
+		</div>
+		<div class="input-field">
+			<input id="year_need" type="text" class="validate" autocomplete="off">
+			<label id="label_year_need" for="year_need">Годовое потребление (S)</label>
+		</div>
+		<div class="input-field">
+			<input id="storage" type="text" class="validate" autocomplete="off">
+			<label id="label_storage" for="storage">Затраты на содержание запасов (i, %)</label>
+		</div>
+		<div class="input-field">
+			<input id="order" type="text" class="validate" autocomplete="off">
+			<label id="label_order" for="order">Затраты на выполнение заказа (C0)</label>
+		</div>
+		<div class="input-field">
+			<input id="price" type="text" class="validate" autocomplete="off">
+			<label id="label_price" for="price">Цена единицы продукции (C1)</label>
+		</div>
+		<div class="input-field">
+			<input id="deficit" type="text" class="validate" autocomplete="off">
+			<label id="label_deficit" for="deficit">Издержки, обусловленные дефицитом (h)</label>
+		</div>
+		<div class="input-field">
+			<input id="volume" type="text" class="validate" autocomplete="off">
+			<label id="label_volume" for="volume">Объем собственного производства деталей (Q)</label>
+		</div>
+		<div class="row">
+			<a id="calculate" class="waves-effect waves-light btn col s12">Посчитать ОРЗ</a>
+		</div>
+		<div class="row">
+			<p class="col s6">Оптимальный размер заказа</p>
+			<h5 id="eoq" class="col s6 center"></h5>
+		</div>
+		<div class="row">
+			<p class="col s6">Оптимальный размер заказа при собственном производстве</p>
+			<h5 id="eoq_self" class="col s6 center"></h5>
+		</div>
+		<div class="row">
+			<p class="col s6">Оптимальный размер заказа в условиях дефицита</p>
+			<h5 id="eoq_deficit" class="col s6 center"></h5>
+		</div>
+		<div class="row">
+			<p class="col s6">Оптимальный размер заказа в условиях дефицита при собственном производстве</p>
+			<h5 id="eoq_self_deficit" class="col s6 center"></h5>
+		</div>
+		<div class="row">
+			<a id="save_report" class="waves-effect waves-light btn col s12" style="display: none">Сохранить отчет в файл</a>
+		</div>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script
+	src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+	<script src="app.js"></script>
+</body>
+</html>
