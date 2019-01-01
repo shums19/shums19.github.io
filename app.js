@@ -1,3 +1,18 @@
+(function($) {
+	$.fn.inputFilter = function(inputFilter) {
+		return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+			if (inputFilter(this.value)) {
+				this.oldValue = this.value;
+				this.oldSelectionStart = this.selectionStart;
+				this.oldSelectionEnd = this.selectionEnd;
+			} else if (this.hasOwnProperty("oldValue")) {
+				this.value = this.oldValue;
+				this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+			}
+		});
+	};
+}(jQuery));
+
 var validateValue = function(element, flag) {
 	var value = $("#" + element).val();
 	if (value == "" || value == null || isNaN(parseFloat(value)) || parseFloat(value) < 0) {
@@ -12,6 +27,10 @@ var validateValue = function(element, flag) {
 }
 
 var main = function() {
+	$(".float").inputFilter(function(value) {
+		return /^-?\d*[.,]?\d*$/.test(value); 
+	});
+
 	$("#upload_data").change(function(event) {
 		var file = this.files[0];
 		var reader = new FileReader();
