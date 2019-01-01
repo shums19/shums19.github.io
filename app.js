@@ -95,8 +95,8 @@ var main = function() {
 
 		var eoqFlag = true, 
 		eoqWithSelfFlag = true, 
-		eoqWithDeficitFlag = true, 
-		eoqWithDeficitAndSelfFlag = true;
+		eoqWithDeficitFlag = true; 
+// 		eoqWithDeficitAndSelfFlag = true;
 		var eoq = Math.sqrt(2*yearNeed*order/(storage*price/100));
 		if (isNaN(eoq)) eoqFlag = false;
 		else {
@@ -115,30 +115,30 @@ var main = function() {
 			reportText += "Оптимальный размер заказа в условиях дефицита: \r\n";
 			reportText += eoq + "*" + "sqrt((" + price + "*" + (storage/100) + "+" + deficit + ")/" + deficit + ") = " + eoqWithDeficit + "\r\n\r\n";
 		}
-		var eoqWithDeficitAndSelf = eoqWithSelf*Math.sqrt((price*storage/100+deficit)/deficit);
-		if (isNaN(eoqWithDeficitAndSelf)) eoqWithDeficitAndSelfFlag = false;
-		else {
-			reportText += "Оптимальный размер заказа в условиях дефицита при собственном производстве: \r\n";
-			reportText += eoq + "*" + "sqrt((" + price + "*" + (storage/100) + "+" + deficit + ")/" + deficit + ") = " + eoqWithDeficitAndSelf + "\r\n\r\n";
-		}
+// 		var eoqWithDeficitAndSelf = eoqWithSelf*Math.sqrt((price*storage/100+deficit)/deficit);
+// 		if (isNaN(eoqWithDeficitAndSelf)) eoqWithDeficitAndSelfFlag = false;
+// 		else {
+// 			reportText += "Оптимальный размер заказа в условиях дефицита при собственном производстве: \r\n";
+// 			reportText += eoq + "*" + "sqrt((" + price + "*" + (storage/100) + "+" + deficit + ")/" + deficit + ") = " + eoqWithDeficitAndSelf + "\r\n\r\n";
+// 		}
 
-		if (!eoqFlag || !eoqWithSelfFlag || !eoqWithDeficitFlag || !eoqWithDeficitAndSelfFlag) {
+		if (!eoqFlag || !eoqWithSelfFlag || !eoqWithDeficitFlag) { // || !eoqWithDeficitAndSelfFlag) {
 			var alertText = "Некорректные данные. Невозможно посчитать:\n"
 			if (!eoqFlag) alertText += "    Оптимальный размер заказа\n";
 			if (!eoqWithSelfFlag) alertText += "    Оптимальный размер заказа при собственном производстве\n";
 			if (!eoqWithDeficitFlag) alertText += "    Оптимальный размер заказа в условиях дефицита\n";
-			if (!eoqWithDeficitAndSelfFlag) alertText += "    Оптимальный размер заказа в условиях дефицита при собственном производстве";
+// 			if (!eoqWithDeficitAndSelfFlag) alertText += "    Оптимальный размер заказа в условиях дефицита при собственном производстве";
 			alert(alertText);
 			eoqFlag = true;
 			eoqWithSelfFlag = true;
 			eoqWithDeficitFlag = true;
-			eoqWithDeficitAndSelfFlag = true;
+// 			eoqWithDeficitAndSelfFlag = true;
 		}
 
 		$("#eoq").text(Math.round(eoq));
 		$("#eoq_self").text(Math.round(eoqWithSelf));
 		$("#eoq_deficit").text(Math.round(eoqWithDeficit));
-		$("#eoq_self_deficit").text(Math.round(eoqWithDeficitAndSelf));
+// 		$("#eoq_self_deficit").text(Math.round(eoqWithDeficitAndSelf));
 
 		$("#save_report").css("display", "block");
 	});
