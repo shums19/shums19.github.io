@@ -26,9 +26,82 @@ var validateValue = function(element, flag) {
 	return parseFloat(value);
 }
 
+var checkParams = function() {
+	var details_num = $('#details_num').val();
+	var price = $('#price').val();
+	var extra_price = $('#extra_price').val();
+	var addition_order = $('#addition_order').val();
+	var failure = $('#failure').val();
+
+	if(details_num.length != 0 && price.length != 0 
+		&& extra_price.length != 0 && addition_order != 0
+		&& failure != 0) {
+		$('#calculate').removeAttr('disabled');
+} else {
+	$('#calculate').attr('disabled', 'disabled');
+}
+}
+
+var factorial = function(n) {
+	return n ? n * factorial(n - 1) : 1;
+}
+
+var probability = function(p, j, x) {
+	var step1 = factorial(x)/(factorial(j)*factorial(x-j));
+	var step2 = step1 * Math.pow(p, j);
+	var step3 = step2 * Math.pow((1-p), (x-j));
+	return step3;
+}
+
+var expression = function(n, K, c, v, p, x) {
+	var step1 = 0;
+	for (let i = 0; i <= x; ++i) {
+		step1 += i*probability(p, i, x);
+	}
+	var step2 = 0;
+	for (let i = 0; i <= x-n; ++i) {
+		step2 += (x-n-i)*probability(p, i, x);
+	}
+	var step3 = 0;
+	for (let i = x-n+1; i <= x; ++i) {
+		step3 += probability(p, i, x);
+	}
+	var step4 = 0;
+	for (let i = x-n+1; i <= x-1; ++i) {
+		step4 += calculateCost(n-x+i, K, c, v, p)[0]*probability(p, i, x);
+	}
+	var step5 = Math.pow((1 - probability(p, x, x)), -1);
+	var step6 = c * (x - step1) - v * step2 + K * step3 + step4;
+	return step5 * step6;
+}
+
+var cash = new Map();
+
+var calculateCost = function(n, K, c, v, p) {
+	if (cash.has(n)) return cash.get(n);
+	else {
+		let minF = 999999999;
+		let x = 0;
+		for (let i = n; i < 1000000000; ++i) {
+			let tmp = expression(n, K, c, v, p, i);
+			if (tmp < minF) {
+				minF = tmp;
+				x = i;
+			} else if (tmp > minF) {
+				break;
+			}
+		}
+		cash.set(n, [minF, x]);
+		return [minF, x];
+	}
+}
+
 var main = function() {
 	$(".float").inputFilter(function(value) {
-		return /^-?\d*[.,]?\d*$/.test(value); 
+		return /^\d*[.,]?\d*$/.test(value); 
+	});
+	$(".int").inputFilter(function(value) {
+		return /^\d*$/.test(value); 
 	});
 
 	$("#upload_data").change(function(event) {
@@ -37,24 +110,21 @@ var main = function() {
 		reader.onload = function (e) {
 			var data = (e.target.result).split("\r\n");
 			if (data.length == 6) {
-				$("#year_need").val(data[0]);
-				$("#label_year_need").addClass("active");
-				$("#year_need").addClass("valid");
-				$("#storage").val(data[1]);
-				$("#label_storage").addClass("active");
-				$("#storage").addClass("valid");
-				$("#order").val(data[2]);
-				$("#label_order").addClass("active");
-				$("#order").addClass("valid");
-				$("#price").val(data[3]);
+				$("#details_num").val(data[0]);
+				$("#label_details_num").addClass("active");
+				$("#details_num").addClass("valid");
+				$("#price").val(data[1]);
 				$("#label_price").addClass("active");
 				$("#price").addClass("valid");
-				$("#deficit").val(data[4]);
-				$("#label_deficit").addClass("active");
-				$("#deficit").addClass("valid");
-				$("#volume").val(data[5]);
-				$("#label_volume").addClass("active");
-				$("#volume").addClass("valid");
+				$("#extra_price").val(data[2]);
+				$("#label_extra_price").addClass("active");
+				$("#extra_price").addClass("valid");
+				$("#addition_order").val(data[3]);
+				$("#label_addition_order").addClass("active");
+				$("#addition_order").addClass("valid");
+				$("#failure").val(data[4]);
+				$("#label_failure").addClass("active");
+				$("#failure").addClass("valid");
 			}
 			else {
 				alert("Некорректное содержимое файла.");
@@ -65,17 +135,15 @@ var main = function() {
 
 	$("#save_data").click(function() {
 		var data = "";
-		data += validateValue("year_need", false);
-		data + "\r\n";
-		data += validateValue("storage", false);
-		data + "\r\n";
-		data += validateValue("order", false);
+		data += validateValue("details_num", false);
 		data + "\r\n";
 		data += validateValue("price", false);
 		data + "\r\n";
-		data += validateValue("deficit", false);
+		data += validateValue("extra_price", false);
 		data + "\r\n";
-		data += validateValue("volume", false);
+		data += validateValue("addition_order", false);
+		data + "\r\n";
+		data += validateValue("failure", false);
 		var txtData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(data);
 		this.href = txtData;
 		this.target = '_blank';
@@ -86,59 +154,20 @@ var main = function() {
 
 	$("#calculate").click(function() {
 		reportText = "";
-		var yearNeed = validateValue("year_need", true);
-		var storage = validateValue("storage", true);
-		var order = validateValue("order", true);
+		var details_num = validateValue("details_num", true);
 		var price = validateValue("price", true);
-		var deficit = validateValue("deficit", true);
-		var volume = validateValue("volume", true);
+		var extra_price = validateValue("extra_price", true);
+		var addition_order = validateValue("addition_order", true);
+		var failure = validateValue("failure", true);
 
-		var eoqFlag = true, 
-		eoqWithSelfFlag = true, 
-		eoqWithDeficitFlag = true; 
-// 		eoqWithDeficitAndSelfFlag = true;
-		var eoq = Math.sqrt(2*yearNeed*order/(storage*price/100));
-		if (isNaN(eoq)) eoqFlag = false;
-		else {
-			reportText += "Оптимальный размер заказа: \r\n";
-			reportText += "sqrt(2*" + yearNeed + "*" + order + "/(" + price + "*" + (storage/100) + ")) = " + eoq + "\r\n\r\n";
-		}
-		var eoqWithSelf = Math.sqrt(2*yearNeed*order/(storage*price/100*(1-yearNeed/volume)));
-		if (isNaN(eoqWithSelf)) eoqWithSelfFlag = false;
-		else {
-			reportText += "Оптимальный размер заказа при собственном производстве: \r\n";
-			reportText += "sqrt(2*" + yearNeed + "*" + order + "/(" + price + "*" + (storage/100) + "*(1-" + yearNeed + "/" + volume + "))) = " + eoqWithSelf + "\r\n\r\n";
-		}
-		var eoqWithDeficit = eoq*Math.sqrt((price*storage/100+deficit)/deficit);
-		if (isNaN(eoqWithDeficit)) eoqWithDeficitFlag = false;
-		else {
-			reportText += "Оптимальный размер заказа в условиях дефицита: \r\n";
-			reportText += eoq + "*" + "sqrt((" + price + "*" + (storage/100) + "+" + deficit + ")/" + deficit + ") = " + eoqWithDeficit + "\r\n\r\n";
-		}
-// 		var eoqWithDeficitAndSelf = eoqWithSelf*Math.sqrt((price*storage/100+deficit)/deficit);
-// 		if (isNaN(eoqWithDeficitAndSelf)) eoqWithDeficitAndSelfFlag = false;
-// 		else {
-// 			reportText += "Оптимальный размер заказа в условиях дефицита при собственном производстве: \r\n";
-// 			reportText += eoq + "*" + "sqrt((" + price + "*" + (storage/100) + "+" + deficit + ")/" + deficit + ") = " + eoqWithDeficitAndSelf + "\r\n\r\n";
-// 		}
 
-		if (!eoqFlag || !eoqWithSelfFlag || !eoqWithDeficitFlag) { // || !eoqWithDeficitAndSelfFlag) {
-			var alertText = "Некорректные данные. Невозможно посчитать:\n"
-			if (!eoqFlag) alertText += "    Оптимальный размер заказа\n";
-			if (!eoqWithSelfFlag) alertText += "    Оптимальный размер заказа при собственном производстве\n";
-			if (!eoqWithDeficitFlag) alertText += "    Оптимальный размер заказа в условиях дефицита\n";
-// 			if (!eoqWithDeficitAndSelfFlag) alertText += "    Оптимальный размер заказа в условиях дефицита при собственном производстве";
-			alert(alertText);
-			eoqFlag = true;
-			eoqWithSelfFlag = true;
-			eoqWithDeficitFlag = true;
-// 			eoqWithDeficitAndSelfFlag = true;
-		}
+		$("#result").css("display", "table");
 
-		$("#eoq").text(Math.round(eoq));
-		$("#eoq_self").text(Math.round(eoqWithSelf));
-		$("#eoq_deficit").text(Math.round(eoqWithDeficit));
-// 		$("#eoq_self_deficit").text(Math.round(eoqWithDeficitAndSelf));
+		for (let i = 1; i <= 11; ++i) {
+			var res = calculateCost(i, 50, 10, 0, 0.5);
+			$('#result tbody').append('<tr><td>' + i + '</td><td>' + res[1] + '</td><td>' + res[0].toFixed(3) + '</td></tr>');
+			reportText += "Для обеспечения " + i + " исправных деталей размер заказываемой партии должен составить " + res[1] + ". При этом затраты: " + res[0].toFixed(3) + ".\r\n";
+		}
 
 		$("#save_report").css("display", "block");
 	});
@@ -146,7 +175,7 @@ var main = function() {
 	$("#save_report").click(function() {
 		if (reportText == "")
 		{
-			alert("Сформировать отчет не из чего.");
+			alert("Невозможно сформировать отчет. Отсутствует информация.");
 		}
 		else {
 			var txtData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(reportText);
