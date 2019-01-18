@@ -33,11 +33,12 @@ var checkParams = function() {
 	var addition_order = $('#addition_order').val();
 	var failure = $('#failure').val();
 
-	if(details_num.length != 0 && price.length != 0 
+	if (details_num.length != 0 && price.length != 0 
 		&& extra_price.length != 0 && addition_order != 0
 		&& failure != 0) {
 		$('#calculate').removeAttr('disabled');
-} else {
+} 
+else {
 	$('#calculate').attr('disabled', 'disabled');
 }
 }
@@ -126,6 +127,7 @@ var main = function() {
 				$("#failure").val(data[4]);
 				$("#label_failure").addClass("active");
 				$("#failure").addClass("valid");
+				$('#calculate').removeAttr('disabled');
 			}
 			else {
 				alert("Некорректное содержимое файла.");
