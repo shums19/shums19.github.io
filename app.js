@@ -163,8 +163,8 @@ var main = function() {
 
 		$("#result").css("display", "table");
 
-		for (let i = 1; i <= 11; ++i) {
-			var res = calculateCost(i, 50, 10, 0, 0.5);
+		for (let i = 1; i <= details_num; ++i) {
+			var res = calculateCost(i, addition_order, price, extra_price, failure);
 			$('#result tbody').append('<tr><td>' + i + '</td><td>' + res[1] + '</td><td>' + res[0].toFixed(3) + '</td></tr>');
 			reportText += "Для обеспечения " + i + " исправных деталей размер заказываемой партии должен составить " + res[1] + ". При этом затраты: " + res[0].toFixed(3) + ".\r\n";
 		}
