@@ -108,8 +108,9 @@ var main = function() {
 		var file = this.files[0];
 		var reader = new FileReader();
 		reader.onload = function (e) {
-			var data = (e.target.result).split("\r\n");
-			if (data.length == 6) {
+			var data = (e.target.result).split(":");
+			console.log(data);
+			if (data.length == 5) {
 				$("#details_num").val(data[0]);
 				$("#label_details_num").addClass("active");
 				$("#details_num").addClass("valid");
@@ -136,13 +137,13 @@ var main = function() {
 	$("#save_data").click(function() {
 		var data = "";
 		data += validateValue("details_num", false);
-		data + "\r\n";
+		data += ":";
 		data += validateValue("price", false);
-		data + "\r\n";
+		data += ":";
 		data += validateValue("extra_price", false);
-		data + "\r\n";
+		data += ":";
 		data += validateValue("addition_order", false);
-		data + "\r\n";
+		data += ":";
 		data += validateValue("failure", false);
 		var txtData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(data);
 		this.href = txtData;
@@ -153,6 +154,7 @@ var main = function() {
 	var reportText = "";
 
 	$("#calculate").click(function() {
+		$("#result tbody tr").remove();
 		reportText = "";
 		var details_num = validateValue("details_num", true);
 		var price = validateValue("price", true);
@@ -168,6 +170,7 @@ var main = function() {
 			$('#result tbody').append('<tr><td>' + i + '</td><td>' + res[1] + '</td><td>' + res[0].toFixed(3) + '</td></tr>');
 			reportText += "Для обеспечения " + i + " исправных деталей размер заказываемой партии должен составить " + res[1] + ". При этом затраты: " + res[0].toFixed(3) + ".\r\n";
 		}
+		cash = new Map();
 
 		$("#save_report").css("display", "block");
 	});
