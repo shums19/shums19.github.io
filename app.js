@@ -34,8 +34,8 @@ var checkParams = function() {
 	var failure = $('#failure').val();
 
 	if (details_num.length != 0 && price.length != 0 
-		&& extra_price.length != 0 && addition_order != 0
-		&& failure != 0) {
+		&& extra_price.length != 0 && addition_order.length != 0
+		&& failure.length != 0) {
 		$('#calculate').removeAttr('disabled');
 } 
 else {

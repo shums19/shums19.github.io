@@ -31,41 +31,41 @@
 		</div>
 		<div class="input-field">
 			<input id="extra_price" type="text" class="validate float" autocomplete="off" onkeyup="checkParams()" >
-			<label id="label_extra_price" for="extra_price">Цена избыточной детали (v; 0<=v<=c)
-			</div>
-			<div class="input-field">
-				<input id="addition_order" type="text" class="validate float" autocomplete="off" onkeyup="checkParams()" >
-				<label id="label_addition_order" for="addition_order">Затраты на дополнительный заказ (К)</label>
-			</div>
-			<div class="input-field">
-				<input id="failure" type="text" class="validate float" autocomplete="off" onkeyup="checkParams()">
-				<label id="label_failure" for="failure">Вероятность неисправности детали (p)</label>
-			</div>
-			<div class="row">
-				<a id="calculate" class="waves-effect waves-light btn col s12" disabled>Рассчитать</a>
-			</div>
-			<div class="row">
-				<table id="result" class="highlight" style="display:none">
-					<thead>
-						<tr>
-							<th>Кол-во исправных деталей</th>
-							<th>Размер партии</th>
-							<th>Затраты</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="row">
-				<a id="save_report" class="waves-effect waves-light btn col s12" style="display: none">Сохранить отчет</a>
-			</div>
+			<label id="label_extra_price" for="extra_price">Цена избыточной детали (v; 0<=v<=c)</label>
 		</div>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-		<script
-		src="https://code.jquery.com/jquery-3.3.1.min.js"
-		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-		crossorigin="anonymous"></script>
-		<script src="app.js"></script>
-	</body>
-	</html>
+		<div class="input-field">
+			<input id="addition_order" type="text" class="validate float" autocomplete="off" onkeyup="checkParams()" >
+			<label id="label_addition_order" for="addition_order">Затраты на дополнительный заказ (К)</label>
+		</div>
+		<div class="input-field">
+			<input id="failure" type="text" class="validate float" autocomplete="off" onkeyup="checkParams()">
+			<label id="label_failure" for="failure">Вероятность неисправности детали (p)</label>
+		</div>
+		<div class="row">
+			<a id="calculate" class="waves-effect waves-light btn col s12" disabled>Рассчитать</a>
+		</div>
+		<div class="row">
+			<table id="result" class="highlight" style="display:none">
+				<thead>
+					<tr>
+						<th>Кол-во исправных деталей</th>
+						<th>Размер партии</th>
+						<th>Затраты</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div class="row">
+			<a id="save_report" class="waves-effect waves-light btn col s12" style="display: none">Сохранить отчет</a>
+		</div>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script
+	src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+	<script src="app.js"></script>
+</body>
+</html>
